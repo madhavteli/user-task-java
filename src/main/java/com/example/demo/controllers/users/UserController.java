@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.TaskDTO;
+import com.example.demo.dto.UserDTO;
 import com.example.demo.entity.User;
+import com.example.demo.mappers.UserMapper;
 import com.example.demo.repos.UserRepository;
 import com.example.demo.services.interfaces.ITaskService;
 
@@ -29,8 +31,8 @@ public class UserController {
   private ITaskService taskService;
 
   @PostMapping("/add")
-  public ResponseEntity<User> addUser(@RequestBody User user) {
-    return new ResponseEntity<>(repository.save(user), HttpStatus.CREATED);
+  public ResponseEntity<UserDTO> addUser(@RequestBody User user) {
+    return new ResponseEntity<>(UserMapper.mapToDTO(repository.save(user)), HttpStatus.CREATED);
   }
 
   @DeleteMapping("/{userId}")
@@ -44,20 +46,20 @@ public class UserController {
   }
 
   @GetMapping("/{userId}")
-  public ResponseEntity<User> getUser(@PathVariable Long userId) {
+  public ResponseEntity<UserDTO> getUser(@PathVariable Long userId) {
     Optional<User> userOptional = repository.findById(userId);
     if (userOptional.isPresent()) {
       User user = userOptional.get();
-      return new ResponseEntity<>(user, HttpStatus.OK);
+      return new ResponseEntity<>(UserMapper.mapToDTO(user), HttpStatus.OK);
     } else {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
   }
 
   @GetMapping
-  public ResponseEntity<List<User>> getAllUsers() {
+  public ResponseEntity<List<UserDTO>> getAllUsers() {
     List<User> users = repository.findAll();
-    return new ResponseEntity<>(users, HttpStatus.OK);
+    return new ResponseEntity<>(UserMapper.mapToDTOList(users), HttpStatus.OK);
   }
 
   @GetMapping("/{userId}/tasks")

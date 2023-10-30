@@ -2,6 +2,7 @@ package com.example.demo.dto;
 
 import java.time.LocalDate;
 
+import com.example.demo.enums.TaskPriorityLevel;
 import com.example.demo.enums.TaskStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,4 +19,5 @@ public class TaskDTO {
     private TaskStatus status;
     private Long assignedUserId;
     private int progress;
+    private TaskPriorityLevel taskPriorityLevel;
 }

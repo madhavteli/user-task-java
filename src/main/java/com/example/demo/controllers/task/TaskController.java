@@ -1,5 +1,6 @@
 package com.example.demo.controllers.task;
 
+import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,6 +91,19 @@ public class TaskController {
     public ResponseEntity<TaskStatistics> getTaskStatistics() {
         TaskStatistics taskStatistics = taskService.getTaskStatistics();
         return new ResponseEntity<>(taskStatistics, HttpStatus.OK);
+    }
+
+    @GetMapping("/priority-based-task")
+    public ResponseEntity<List<TaskDTO>> getPendingTasksSortedByPriorityAndDueDate() {
+        List<TaskDTO> tasks = taskService.getTasksByStatus(TaskStatus.PENDING);
+        // Sort by priority and then by due date
+        tasks.sort(
+          Comparator
+            .comparing(TaskDTO::getTaskPriorityLevel)
+            .thenComparing(TaskDTO::getDueDate)
+        );
+
+        return new ResponseEntity<>(tasks, HttpStatus.OK);
     }
 
 }
